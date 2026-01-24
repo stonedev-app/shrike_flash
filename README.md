@@ -99,14 +99,14 @@ shrike_flash/
 ├── README.md                   # このファイル
 ├── CLAUDE.md                   # AI開発支援用ドキュメント
 ├── shrike_flash.ino           # メインのArduinoスケッチ
-├── data/                      # ビットストリームファイル格納フォルダ
-│   └── led_blink.bin         # LED点滅用FPGAビットストリーム
+├── data/                      # ビットストリームファイル格納フォルダ (git管理外)
+│   └── led_blink.bin         # LED点滅用FPGAビットストリーム (要ビルド)
 └── blink_ledd/               # FPGA設計プロジェクト
     ├── blink_ledd.ffpga      # Go Configure プロジェクトファイル
     └── ffpga/
         ├── src/
         │   └── main.v        # Verilog HDLソースコード
-        └── build/
+        └── build/            # FPGA合成出力 (git管理外)
             └── FPGA_bitstream.bin  # 生成されたビットストリーム
 ```
 
@@ -114,7 +114,24 @@ shrike_flash/
 
 ### クイックスタート
 
-既にビットストリームが `data/` フォルダに含まれているため、すぐに動作確認できます。
+GitHubからクローン後、まずFPGAビットストリームをビルドする必要があります。
+
+> **注意**: `data/` と `build/` フォルダはgit管理外のため、GitHubリポジトリには含まれていません。
+
+#### ステップ0: ビットストリームのビルド
+
+1. **Go Configure Software Hub** を起動
+2. **File → Open Project** から `blink_ledd/blink_ledd.ffpga` を開く
+3. **Build** ボタンをクリックしてビットストリームを生成
+4. ビルド成功後、以下のファイルが生成されます：
+   ```
+   blink_ledd/ffpga/build/FPGA_bitstream.bin
+   ```
+5. `data/` フォルダを作成し、ビットストリームをコピー：
+   ```bash
+   mkdir -p data
+   cp blink_ledd/ffpga/build/FPGA_bitstream.bin data/led_blink.bin
+   ```
 
 #### ステップ1: ビットストリームのアップロード
 
