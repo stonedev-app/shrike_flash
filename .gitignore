@@ -1,0 +1,15 @@
+# ビルドフォルダ
+build/
+
+# データフォルダ
+data/
+
+# macOS
+.DS_Store
+
+# Arduino
+*.hex
+*.elf
+*.eep
+*.lss
+*.map
