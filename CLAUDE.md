@@ -6,6 +6,10 @@
 
 このプロジェクトは **Shrike Dev Board** 向けのArduinoプロジェクトで、RP2040/RP2350マイコンを使用してSPI経由でShrike FPGAにFPGAビットストリームをプログラミングします。このプロジェクトは、LittleFSストレージからFPGA構成をフラッシュするためにShrikeFlashライブラリを使用しています。
 
+## 関連ドキュメント
+
+- **[LEARNING.md](./LEARNING.md)** - Verilog学習プラン（2bit/4bit CPU設計を目標とした段階的学習ガイド）
+
 ## ハードウェア
 
 - **ボード**: Shrike Dev Board (RP2040/RP2350ベース)
