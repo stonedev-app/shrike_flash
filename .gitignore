@@ -13,3 +13,7 @@ data/
 *.eep
 *.lss
 *.map
+
+# Verilog simulation
+*.vvp
+*.vcd
