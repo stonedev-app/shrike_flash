@@ -9,6 +9,7 @@
 ## 関連ドキュメント
 
 - **[LEARNING.md](./LEARNING.md)** - Verilog学習プラン（2bit/4bit CPU設計を目標とした段階的学習ガイド）
+- **[SIMULATION.md](./blink_ledd/ffpga/sim/SIMULATION.md)** - Verilogシミュレーション手順（Icarus Verilog + Surfer）
 
 ## ハードウェア
 
@@ -28,6 +29,11 @@ shrike_flash/
     └── ffpga/
         ├── src/
         │   └── main.v     # Verilog HDLソースコード
+        ├── sim/           # シミュレーション用ファイル
+        │   ├── SIMULATION.md   # シミュレーション手順ドキュメント
+        │   ├── tb_main.v       # テストベンチソースコード
+        │   ├── tb_main.vvp     # コンパイル済みシミュレーション (生成物)
+        │   └── tb_main.vcd     # 波形ファイル (生成物)
         └── build/         # FPGA合成/配置配線の出力
             └── FPGA_bitstream.bin  # 生成されたビットストリーム
 ```
@@ -45,7 +51,26 @@ FPGA設計はVerilogで記述し、**GreenPAK Designer**を使用してコンパ
 
 **注意**: FPGA合成はGreenPAK Designer GUIで行われ、コマンドラインツールではありません。
 
-### 2. Arduino開発 (MCUコード)
+### 2. シミュレーション (テストベンチ)
+
+実機にフラッシュする前に、Icarus Verilogでシミュレーションを実行して動作を確認できます：
+
+```bash
+# simディレクトリに移動
+cd blink_ledd/ffpga/sim
+
+# コンパイルして実行
+iverilog -o tb_main.vvp ../src/main.v tb_main.v && vvp tb_main.vvp
+
+# 波形を確認
+surfer tb_main.vcd
+```
+
+**前提条件**: Icarus Verilog (`iverilog`, `vvp`) と Surfer (`surfer`) が必要です。
+
+詳細は [SIMULATION.md](./blink_ledd/ffpga/sim/SIMULATION.md) を参照してください。
+
+### 3. Arduino開発 (MCUコード)
 
 メインスケッチ (`shrike_flash.ino`) はShrikeFlashライブラリを使用してFPGAをプログラムします：
 
@@ -67,7 +92,7 @@ void loop() {
 }
 ```
 
-### 3. アップロードプロセス
+### 4. アップロードプロセス
 
 **ステップ1: ビットストリームファイルをLittleFSにアップロード**
 - `.bin` ファイルを `data/` フォルダに配置
@@ -137,6 +162,8 @@ arduino-cli upload -p /dev/ttyACM0 --fqbn rp2040:rp2040:generic shrike_flash
 - **`.ffpga`** - GreenPAK Designerプロジェクトファイル (XMLベース)
 - **`.v`** - Verilog HDLソースコード
 - **`.edif`** - EDIFネットリスト (合成出力)
+- **`.vvp`** - Icarus Verilogコンパイル済みシミュレーションファイル
+- **`.vcd`** - Value Change Dump 波形ファイル (シミュレーション出力)
 
 ## トラブルシューティング
 
